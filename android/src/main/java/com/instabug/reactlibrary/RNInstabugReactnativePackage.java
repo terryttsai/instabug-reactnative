@@ -7,12 +7,16 @@ import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+
 import com.instabug.library.Instabug;
 import com.instabug.library.InstabugColorTheme;
+import com.instabug.library.instabugdisclaimer.Internal;
 import com.instabug.library.invocation.InstabugInvocationEvent;
 import com.instabug.library.invocation.util.InstabugFloatingButtonEdge;
+
 import android.graphics.Color;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,7 +63,18 @@ public class RNInstabugReactnativePackage implements ReactPackage {
         Instabug.setPrimaryColor(Color.parseColor(primaryColor));
         Instabug.setFloatingButtonEdge(floatingButtonEdge);
         Instabug.setFloatingButtonOffsetFromTop(offset);
+        setupCustomAttributes();
 
+    }
+
+    private void setupCustomAttributes() {
+        try {
+            Method m = Internal.class.getDeclaredMethod("setup");
+            m.setAccessible(true);
+            m.invoke(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public RNInstabugReactnativePackage(String androidApplicationToken, Application androidApplication,
