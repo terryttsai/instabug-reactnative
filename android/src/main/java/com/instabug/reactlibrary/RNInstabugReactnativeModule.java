@@ -27,6 +27,7 @@ import com.instabug.library.InstabugColorTheme;
 import com.instabug.library.logging.InstabugLog;
 import com.instabug.library.bugreporting.model.ReportCategory;
 import com.instabug.library.InstabugCustomTextPlaceHolder;
+import com.instabug.library.model.NetworkLog;
 import com.instabug.library.user.UserEventParam;
 import com.instabug.library.OnSdkDismissedCallback;
 import com.instabug.library.bugreporting.model.Bug;
@@ -34,6 +35,9 @@ import com.instabug.survey.InstabugSurvey;
 
 import com.instabug.reactlibrary.utils.ArrayUtil;
 import com.instabug.reactlibrary.utils.MapUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -229,7 +233,7 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
     /**
      * Change Locale of Instabug UI elements(defaults to English)
      *
-     * @param String instabugLocale
+     * @param instabugLocale
      */
     @ReactMethod
     public void changeLocale(String instabugLocale) {
@@ -317,7 +321,7 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
     /**
      * Set the primary color that the SDK will use to tint certain UI elements in the SDK
      *
-     * @param primaryColorValue The value of the primary color ,
+     * @param primaryColor The value of the primary color ,
      *                          whatever this color was parsed from a resource color or hex color
      *                          or RGB color values
      */
@@ -1160,6 +1164,27 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
         }
     }
 
+    /**
+     * Extracts HTTP connection properties. Request method, Headers, Date, Url and Response code
+     *
+     * @param jsonObject the JSON object containing all HTTP connection properties
+     * @throws JSONException
+     */
+    @ReactMethod
+    public void networkLog(String jsonObject) throws JSONException {
+        NetworkLog networkLog = new NetworkLog();
+        String date = System.currentTimeMillis()+"";
+        networkLog.setDate(date);
+        JSONObject newJSONObject = new JSONObject(jsonObject);
+        networkLog.setUrl(newJSONObject.getString("url"));
+        networkLog.setRequest(newJSONObject.getString("requestBody"));
+        networkLog.setResponse(newJSONObject.getString("responseBody"));
+        networkLog.setMethod(newJSONObject.getString("method"));
+        networkLog.setResponseCode(newJSONObject.getInt("responseCode"));
+        networkLog.setHeaders(newJSONObject.getString("headers"));
+        networkLog.insert();
+    }
+
     private InstabugCustomTextPlaceHolder.Key getStringToKeyConstant(String key) {
         switch (key) {
             case SHAKE_HINT:
@@ -1275,7 +1300,7 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
             .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
             .emit(eventName, params);
     }
-    
+
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
@@ -1293,8 +1318,8 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
         constants.put("invocationModeNewChat", INVOCATION_MODE_NEW_CHAT);
         constants.put("invocationModeChatsList", INVOCATION_MODE_CHATS_LIST);
 
-        constants.put("floatingButtonEdgeLeft",FLOATING_BUTTON_EDGE_LEFT);
-        constants.put("floatingButtonEdgeRight",FLOATING_BUTTON_EDGE_RIGHT);
+        constants.put("floatingButtonEdgeLeft", FLOATING_BUTTON_EDGE_LEFT);
+        constants.put("floatingButtonEdgeRight", FLOATING_BUTTON_EDGE_RIGHT);
 
         constants.put("localeArabic", LOCALE_ARABIC);
         constants.put("localeChineseSimplified", LOCALE_CHINESE_SIMPLIFIED);
@@ -1340,4 +1365,3 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
         return constants;
     }
 }
-

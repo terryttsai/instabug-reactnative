@@ -1,5 +1,50 @@
 import {NativeModules, NativeAppEventEmitter, DeviceEventEmitter, Platform} from "react-native";
+import interceptor from './interceptor.js';
 let {Instabug} = NativeModules;
+
+var jsonObject = {
+  url: '',
+  requestBody: '',
+  responseBody: '',
+  method: '',
+  responseCode: undefined,
+  headers: ''
+}
+
+interceptor.register({
+  request: function (url, config) {
+    // Modify the url or config here
+    jsonObject.url = url;
+    if(!config || !config.method) {
+      //TO-DO: set method to GET!
+      jsonObject.method = 'GET';
+    }
+    if(config) {
+      if(config.body) {
+        jsonObject.requestBody = config.body;
+      } else {
+        jsonObject.requestBody = '';
+      }
+      if(config.method) {
+        jsonObject.method = config.method;
+      }
+      if(config.headers) {
+        jsonObject.headers = config.headers;
+      } else {
+        jsonObject.headers = '';
+      }
+    }
+    return [url, config];
+  },
+
+  response: function (response) {
+    // Modify the reponse object;
+    jsonObject.responseCode = response.status;
+    jsonObject.responseBody = response._bodyText;
+    Instabug.networkLog(JSON.stringify(jsonObject));
+    return response;
+  }
+});
 
 /**
  * Instabug
@@ -782,7 +827,7 @@ module.exports = {
 
     /**
      * @param enabled true to show success dialog after submitting a bug report
-     * 
+     *
      */
     setSuccessDialogEnabled: function(enabled) {
         Instabug.setSuccessDialogEnabled(enabled);
