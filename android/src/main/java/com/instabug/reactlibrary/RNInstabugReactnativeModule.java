@@ -19,6 +19,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.Callback;
 
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.instabug.library.Feature;
 import com.instabug.library.Instabug;
 import com.instabug.library.internal.module.InstabugLocale;
 import com.instabug.library.invocation.InstabugInvocationEvent;
@@ -1160,6 +1161,24 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
         }
     }
 
+    /**
+     * Set whether the view hierarchy is enabled or disabled
+     *
+     * @param enabled desired state of view hierarchy
+     */
+    @ReactMethod
+    public void setViewHierarchyEnabled(boolean enabled) {
+        try {
+          if(enabled) {
+            mInstabug.setViewHierarchyState(Feature.State.ENABLED);
+          } else {
+              mInstabug.setViewHierarchyState(Feature.State.DISABLED);
+          }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private InstabugCustomTextPlaceHolder.Key getStringToKeyConstant(String key) {
         switch (key) {
             case SHAKE_HINT:
@@ -1275,7 +1294,7 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
             .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
             .emit(eventName, params);
     }
-    
+
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
@@ -1340,4 +1359,3 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
         return constants;
     }
 }
-

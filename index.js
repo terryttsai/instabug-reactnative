@@ -652,9 +652,7 @@ module.exports = {
      * @param {boolean} viewHierarchyEnabled A boolean to set whether view hierarchy are enabled or disabled.
      */
     setViewHierarchyEnabled: function (viewHierarchyEnabled) {
-        if (Platform.OS === 'ios') {
-            Instabug.setViewHierarchyEnabled(viewHierarchyEnabled);
-        }
+        Instabug.setViewHierarchyEnabled(viewHierarchyEnabled);
     },
 
     /**
@@ -782,7 +780,7 @@ module.exports = {
 
     /**
      * @param enabled true to show success dialog after submitting a bug report
-     * 
+     *
      */
     setSuccessDialogEnabled: function(enabled) {
         Instabug.setSuccessDialogEnabled(enabled);
