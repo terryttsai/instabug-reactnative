@@ -936,6 +936,7 @@ module.exports = {
         team: Instabug.team,
         messageNotification: Instabug.messageNotification,
         messagesNotificationAndOthers: Instabug.messagesNotificationAndOthers,
-        conversationTextFieldHint: Instabug.conversationTextFieldHint
+        conversationTextFieldHint: Instabug.conversationTextFieldHint,
+        collectingDataText: Instabug.collectingDataText
     }
 };

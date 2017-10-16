@@ -431,10 +431,11 @@ RCT_EXPORT_METHOD(isRunningLive:(RCTResponseSenderBlock)callback) {
               @"screenRecording": @(IBGStringScreenRecording),
               @"image": @(IBGStringImage),
               @"surveyEnterYourAnswer": @(IBGStringSurveyEnterYourAnswerPlaceholder),
-              @"surveyNoAnswerTitle": @(kIBGStringSurveyNoAnswerTitle),
-              @"surveyNoAnswerMessage": @(kIBGStringSurveyNoAnswerMessage),
-              @"surveySubmitTitle": @(kIBGStringSurveySubmitTitle),
-              @"videPressRecord": @(kIBGStringVideoPressRecordTitle)
+              @"surveyNoAnswerTitle": @(IBGStringSurveyNoAnswerTitle),
+              @"surveyNoAnswerMessage": @(IBGStringSurveyNoAnswerMessage),
+              @"surveySubmitTitle": @(IBGStringSurveySubmitTitle),
+              @"videPressRecord": @(IBGStringVideoPressRecordTitle),
+              @"collectingDataText": @(IBGStringCollectingDataText)
               };
 };
 
@@ -452,10 +453,10 @@ RCTLogFunction InstabugReactLogFunction = ^(
 {
     NSString *log = RCTFormatLog([NSDate date], level, fileName, lineNumber, message);
     NSString *compeleteLog = [NSString stringWithFormat:@"Instabug - REACT LOG: %@", log];
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         va_list arg_list;
-        
+
         switch(level) {
             case RCTLogLevelTrace:
                 IBGNSLogWithLevel(compeleteLog, arg_list, IBGLogLevelTrace);
