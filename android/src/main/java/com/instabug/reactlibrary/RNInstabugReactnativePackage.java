@@ -10,7 +10,7 @@ import com.facebook.react.uimanager.ViewManager;
 import com.instabug.library.Feature;
 import com.instabug.library.Instabug;
 import com.instabug.library.InstabugColorTheme;
-import com.instabug.library.instabugdisclaimer.Internal;
+import com.instabug.bug.instabugdisclaimer.Internal;
 import com.instabug.library.invocation.InstabugInvocationEvent;
 import com.instabug.library.invocation.util.InstabugFloatingButtonEdge;
 
