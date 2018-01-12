@@ -19,6 +19,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.Callback;
 
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.instabug.library.Feature;
 import com.instabug.library.Instabug;
 import com.instabug.library.internal.module.InstabugLocale;
 import com.instabug.library.invocation.InstabugInvocationEvent;
@@ -365,6 +366,23 @@ public class RNInstabugReactnativeModule extends ReactContextBaseJavaModule {
         try {
             Instabug.setAttachmentTypesEnabled(screenshot, extraScreenshot, galleryImage,
                     screenRecording);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Sets whether view hierarchy is enabled or not.
+     *
+     * @param {boolean} enabled A boolean to enable or disable view hierarchy.
+     */
+    @ReactMethod
+    public void setViewHierarchyEnabled(boolean enabled) {
+        try {
+          if(enabled)
+            Instabug.setViewHierarchyState(Feature.State.ENABLED);
+          else
+            Instabug.setViewHierarchyState(Feature.State.DISABLED);
         } catch (Exception e) {
             e.printStackTrace();
         }
